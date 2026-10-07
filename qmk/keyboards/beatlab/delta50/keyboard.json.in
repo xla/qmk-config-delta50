@@ -1,22 +1,10 @@
 {
-  "_status": "INCOMPLETE - reference only; rename to keyboard.json only after hardware recovery and validation",
   "manufacturer": "BeatLab",
   "keyboard_name": "Delta50",
   "usb": {
     "vid": "0x4242",
-    "pid": "0x4441"
-  },
-  "matrix_size": {
-    "rows": 4,
-    "cols": 14
-  },
-  "processor": null,
-  "bootloader": null,
-  "matrix_pins": null,
-  "diode_direction": null,
-  "rgblight": {
-    "pin": null,
-    "led_count": null
+    "pid": "0x4441",
+    "device_version": "1.0.0"
   },
   "layouts": {
     "LAYOUT": {
@@ -473,5 +461,25 @@
         }
       ]
     }
-  }
+  },
+  "maintainer": "xla",
+  "url": "https://github.com/xla/qmk-config-delta50",
+  "features": {
+    "bootmagic": true,
+    "extrakey": true,
+    "nkro": true,
+    "console": false,
+    "command": false,
+    "mousekey": false
+  },
+  "bootmagic": {
+    "matrix": [
+      0,
+      1
+    ]
+  },
+  "dynamic_keymap": {
+    "layer_count": 4
+  },
+  "debounce": 5
 }

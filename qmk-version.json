@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/qmk/qmk_firmware.git",
+  "tag": "0.32.0",
+  "commit": "d55d65b77fc7d8c3ea535348f949a3a70bdb3279",
+  "cli_version": "1.1.8"
+}

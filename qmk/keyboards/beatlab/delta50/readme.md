@@ -1,15 +1,15 @@
-# BeatLab Delta50 QMK target: incomplete
+# BeatLab Delta50
 
-`keyboard.json.incomplete` is a structured reference. It contains the recovered USB identity, matrix size, and all 50 physical-to-matrix positions. Its null hardware fields are intentional. QMK will not discover it as a buildable keyboard target.
+50 physical keys in a 4×14 electrical matrix. `keyboard.json.in` contains the recovered physical layout and identity plus authored software settings. `config.h`, `rules.mk`, and the keymaps form the source overlay. QMK generates the `LAYOUT` macro from the staged JSON; no handwritten layout header or custom scanner is needed for the supported GPIO diode matrix.
 
-Hardware facts still required:
+Use `tools/build_firmware.py` from the repository root to combine this overlay with an explicit hardware profile. It produces `keyboard.json` and `hardware_verified.h` in a pinned QMK checkout. This source directory is not directly buildable: processor, pins, bootloader and storage remain external inputs.
 
-1. Exact MCU/processor and compatible bootloader.
-2. Four row GPIO pins and fourteen column GPIO pins, or the actual matrix driver if it is not direct GPIO.
-3. Diode direction.
-4. RGBLight data pin and LED count, plus any hardware-specific driver configuration.
-5. EEPROM or flash layout and any non-default VIA dynamic-keymap storage settings.
+Available keymaps:
 
-After recovering these from board inspection, vendor source, or measured firmware evidence, replace the nulls with verified values in a real `keyboard.json`. Recover the complete raw keymap before creating a default `keymap.c`, then confirm each raw keycode against the QMK version used by the board. Compile and inspect the result before considering a flash. The observed VIA state may differ from the firmware's compiled defaults.
+- `default`: authored QWERTY, navigation/numbers, number toggle, and function/media/RGB layers.
+- `via`: the same defaults with four persistent dynamic layers and Raw HID.
+- `recovered`: generated from a complete raw baseline using the build helper.
 
-No flashing workflow is present in this repository.
+The staged keyboard builds as `beatlab/delta50:<keymap>`. Build output is not evidence that the hardware profile matches the physical keyboard. See the repository root README for setup, profiles, capture, and verification.
+
+Once installed on matching hardware, hold physical Esc while connecting to invoke Bootmagic, clear EEPROM, and enter the configured bootloader. No software-reset keycode is assigned in the authored layers.

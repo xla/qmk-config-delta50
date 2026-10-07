@@ -1,0 +1,22 @@
+{
+  "format": "delta50-hardware-v1",
+  "status": "unverified",
+  "evidence": {
+    "processor": null,
+    "bootloader": null,
+    "matrix_pins": null,
+    "diode_direction": null,
+    "eeprom": null,
+    "lighting": null
+  },
+  "qmk": {
+    "processor": null,
+    "bootloader": null,
+    "matrix_pins": {"rows": [null, null, null, null], "cols": [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+    "diode_direction": null,
+    "eeprom": {"driver": null},
+    "features": {"rgblight": null},
+    "rgblight": {"driver": null, "led_count": null},
+    "ws2812": {"driver": null, "pin": null}
+  }
+}

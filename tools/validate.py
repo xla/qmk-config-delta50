@@ -6,6 +6,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from build_firmware import validate_baseline
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -35,24 +37,33 @@ def validate() -> None:
     assert set(observed["observed_layer_0"]) == set(coords)
     assert observed["unobserved_layers"] == [1, 2, 3]
 
+    # Independently reconstruct KLE geometry, including the offset macro column.
+    expected_layout = []
+    for y, row in enumerate(via["layouts"]["keymap"]):
+        x, width = 0, 1
+        for item in row:
+            if isinstance(item, dict):
+                x += item.get("x", 0)
+                width = item.get("w", 1)
+            else:
+                expected_layout.append({"matrix": list(map(int, item.split(","))), "x": x, "y": y, "w": width})
+                x += width
+                width = 1
+    qmk = read("qmk/keyboards/beatlab/delta50/keyboard.json.in")
+    assert qmk["layouts"]["LAYOUT"]["layout"] == expected_layout
+    assert qmk["usb"]["vid"] == via["vendorId"] and qmk["usb"]["pid"] == via["productId"]
+    assert qmk["dynamic_keymap"]["layer_count"] == 4
+    assert qmk["bootmagic"]["matrix"] == [0, 1]
+    assert "processor" not in qmk and "matrix_pins" not in qmk
+
     baseline = ROOT / "data/keymap-baseline.json"
     if baseline.exists():
         dump = json.loads(baseline.read_text(encoding="utf-8"))
-        assert dump["format"] == "delta50-via-keymap-v1"
-        assert dump["vendor_id"] == "0x4242"
-        assert dump["product_id"] == "0x4441"
-        assert dump["via_protocol"].lower() == "0x000c"
-        assert dump["matrix"] == {"rows": 4, "cols": 14}
-        assert len(dump["layers"]) == 4
-        for layer in dump["layers"]:
-            assert len(layer) == 4
-            for row in layer:
-                assert len(row) == 14
-                assert all(isinstance(code, str) and len(code) == 6 and code.startswith("0x") and all(c in "0123456789ABCDEFabcdef" for c in code[2:]) for code in row)
+        validate_baseline(dump)
         print("Full four-layer raw baseline: valid")
     else:
         print("Full four-layer raw baseline: unavailable; connect board and capture")
-    print("VIA definition and 50-key matrix: valid")
+    print("VIA definition, QMK geometry and 50-key matrix: valid")
 
 
 if __name__ == "__main__":
