@@ -1,0 +1,25 @@
+{
+  "format": "delta50-hardware-v1",
+  "status": "compile-test-only",
+  "evidence": {
+    "processor": "Synthetic ATmega32U4 fixture; not Delta50 hardware evidence",
+    "bootloader": "Synthetic fixture",
+    "matrix_pins": "Arbitrary distinct GPIOs; not the Delta50 pinout",
+    "diode_direction": "Synthetic fixture",
+    "eeprom": "ATmega32U4 internal EEPROM for compile testing",
+    "lighting": "One synthetic WS2812 LED on B7"
+  },
+  "qmk": {
+    "processor": "atmega32u4",
+    "bootloader": "atmel-dfu",
+    "matrix_pins": {
+      "rows": ["D0", "D1", "D2", "D3"],
+      "cols": ["B0", "B1", "B2", "B3", "B4", "B5", "B6", "C6", "C7", "D4", "D6", "D7", "F4", "F5"]
+    },
+    "diode_direction": "COL2ROW",
+    "eeprom": {"driver": "vendor"},
+    "features": {"rgblight": true},
+    "rgblight": {"driver": "ws2812", "led_count": 1},
+    "ws2812": {"driver": "bitbang", "pin": "B7"}
+  }
+}

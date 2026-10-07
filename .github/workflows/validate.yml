@@ -1,4 +1,4 @@
-name: Validate recovered data
+name: Validate data and compile QMK
 on:
   push:
   pull_request:
@@ -13,3 +13,16 @@ jobs:
       - run: python3 tools/validate.py
       - run: python3 -m unittest discover -s tests -v
       - run: python3 -m compileall -q tools
+  compile-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y gcc-avr binutils-avr avr-libc
+      - run: python3 tools/setup_qmk.py --avr-only
+      - run: python3 -m pip install -r requirements-build.txt -r .build/qmk_firmware/requirements.txt
+      - run: python3 tools/test_compile.py
+      # These are synthetic hardware builds, not Delta50 firmware releases.
+      # Deliberately do not upload or publish their binaries.

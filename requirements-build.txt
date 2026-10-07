@@ -1,0 +1,2 @@
+# The QMK source revision and CLI are pinned together in qmk-version.json.
+qmk==1.1.8
